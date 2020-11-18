@@ -1,9 +1,3 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -116,7 +110,7 @@ def graph(ax, min_wind_speed: float, max_wind_speed: float, storage: list, max_e
 def generate_polars_image(storage):
     fig, ((ax1, ax2, ax3, ax4), (ax5, ax6, ax7, ax8),
           (ax9, ax10, ax11, ax12)) = plt.subplots(3, 4, figsize=(25, 25),
-                                                                            subplot_kw=dict(projection='polar'))
+                                                  subplot_kw=dict(projection='polar'))
     graph(ax1, 0, 2.5, storage, 15)
     graph(ax2, 2.5, 5, storage, 15)
     graph(ax3, 5, 7.5, storage, 15)
@@ -129,34 +123,28 @@ def generate_polars_image(storage):
     graph(ax10, 22.5, 25, storage, 30)
     graph(ax11, 25, 27.5, storage, 30)
     graph(ax12, 27.5, 30, storage, 30)
-    #graph(ax13, 30, 32.5, storage, 30)
-    #graph(ax14, 32.5, 30, storage, 30)
-    #graph(ax15, 30, 37.5, storage, 30)
-    #graph(ax16, 37.5, 40, storage, 30)
+    # graph(ax13, 30, 32.5, storage, 30)
+    # graph(ax14, 32.5, 30, storage, 30)
+    # graph(ax15, 30, 37.5, storage, 30)
+    # graph(ax16, 37.5, 40, storage, 30)
     return fig
 
 
 def generate_polar_file(parameters):
-    def func1(angles, a, b, c, d, e, f, g):
-        return np.poly1d([a, b, c, d, e, f, g])(angles)
+    def func1(radangles, a, b, c, d, e, f, g):
+        return np.poly1d([a, b, c, d, e, f, g])(radangles)
 
     dictionary = {}
-    angles = np.linspace(np.pi*(30/180), np.pi, 151)
+    angles = np.linspace(np.pi * (30 / 180), np.pi, 151)
     dictionary['angles'] = np.linspace(30, 180, 151)
     for element in parameters:
         dictionary[element["label"]] = [round(func1(angle, *element["par"]), 1) for angle in angles]
     return pd.DataFrame.from_dict(dictionary)
 
 
-# SOG_URL = 'https://exocet.cloud/grafana/api/datasources/proxy/12/query?db=TeamMalizia&q=SELECT%20mean(
-# %221s_ES.GPS_SOG%22)%20FROM%20%22Malizia_1s%22GROUP%20BY%20time(5s)%20fill(null)&epoch=ms' TWA_URL =
-# 'https://exocet.cloud/grafana/api/datasources/proxy/12/query?db=TeamMalizia&q=SELECT%20mean(
-# %221s_WTP_rename.TWA%22)%20FROM%20%22Malizia_1s%22GROUP%20BY%20time(5s)%20fill(null)&epoch=ms' TWS_URL =
-# 'https://exocet.cloud/grafana/api/datasources/proxy/12/query?db=TeamMalizia&q=SELECT%20mean(
-# %221s_WTP_rename.TWS%22)%20FROM%20%22Malizia_1s%22GROUP%20BY%20time(5s)%20fill(null)&epoch=ms'
-SOG_URL = None
-TWA_URL = None
-TWS_URL = None
+SOG_URL = 'https://exocet.cloud/grafana/api/datasources/proxy/12/query?db=TeamMalizia&q=SELECT%20mean( %221s_ES.GPS_SOG%22)%20FROM%20%22Malizia_1s%22GROUP%20BY%20time(5s)%20fill(null)&epoch=ms'
+TWA_URL = 'https://exocet.cloud/grafana/api/datasources/proxy/12/query?db=TeamMalizia&q=SELECT%20mean(%221s_WTP_rename.TWA%22)%20FROM%20%22Malizia_1s%22GROUP%20BY%20time(5s)%20fill(null)&epoch=ms'
+TWS_URL = 'https://exocet.cloud/grafana/api/datasources/proxy/12/query?db=TeamMalizia&q=SELECT%20mean(%221s_WTP_rename.TWS%22)%20FROM%20%22Malizia_1s%22GROUP%20BY%20time(5s)%20fill(null)&epoch=ms'
 
 if not os.path.isfile('data.json'):
     open('data.json', 'w+').write('{"time":0}')
@@ -190,12 +178,6 @@ else:
 
 parameter_storage = []
 polars_png = generate_polars_image(parameter_storage)
-polar_file=generate_polar_file(parameter_storage)
+polar_file = generate_polar_file(parameter_storage)
 polar_file.to_excel('polars.xlsx')
 polars_png.savefig('polars.png')
-pass
-# Press the green button in the gutter to run the script.
-# if __name__ == '__main__':
-#    pass
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
